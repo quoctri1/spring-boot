@@ -19,7 +19,8 @@ pipeline {
                 KANIKO_AUTHEN = credentials('docker')
             }
             steps {
-                sh 'docker run --rm --name kaniko -v ${env.WORKSPACE}:/workspace -v $KANIKO_AUTHEN:/kaniko/.docker/config.json gcr.io/kaniko-project/executor:latest --dockerfile=/workspace/Dockerfile --destination=phqtri/spring-boot:${env.BUILD_NUMBER}'
+                sh 'ls -la'
+                sh "docker run --rm --name kaniko -v ${env.WORKSPACE}:/workspace -v ${env.KANIKO_AUTHEN}:/kaniko/.docker/config.json gcr.io/kaniko-project/executor:latest --dockerfile=/workspace/Dockerfile --destination=phqtri/spring-boot:${env.BUILD_NUMBER}"
             }
         }
         stage('Test') {
