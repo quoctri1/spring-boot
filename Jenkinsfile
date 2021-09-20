@@ -61,13 +61,12 @@ pipeline {
                     //Channels
                     def channels = sh(returnStdout: true, script: "curl -X GET http://localhost:8080/api/${spaceId}/projects/${projectId}/channels -H \"X-Octopus-ApiKey: ${env.OCTOPUS_API_TOKEN}\"").trim()
                     def channelsInfo = readJSON text: channels
-                    echo "channels: ${channelsInfo}"
-                    // for (int i = 0; i < channelsInfo.Items.size(); i++) {
-                    //     if (channelsInfo.Items[i].Name == "${env.OCTOPUS_PROJECT_NAME}") {
-                    //         channelId = "${channelsInfo.Items[i].Id}"
-                    //     }
-                    // }
-                    // echo "channelId: ${channelId}"
+                    for (int i = 0; i < channelsInfo.Items.size(); i++) {
+                        if (channelsInfo.Items[i].Name == "${env.OCTOPUS_CHANNEL_NAME}") {
+                            channelId = "${channelsInfo.Items[i].Id}"
+                        }
+                    }
+                    echo "channelId: ${channelId}"
                 }
             }
         }
