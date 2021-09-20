@@ -38,6 +38,7 @@ pipeline {
                 OCTOPUS_API_TOKEN = credentials('octopus_api_token')
             }
             steps {
+                echo 'Hello World'
                 script {
                     def browsers = ['chrome', 'firefox']
                     for (int i = 0; i < browsers.size(); ++i) {
