@@ -6,7 +6,8 @@ OCTOPUS_PACKAGE_VERSION =${env.BUILD_NUMBER}
 
 pipeline {
     agent {
-        label 'slave_node'
+        // label 'slave_node'
+        any
     }
 
     stages {
@@ -51,16 +52,14 @@ pipeline {
                 // }
         //     }
         // }
-        node() {
-            stage('Example') {
-                steps {
-                    echo 'Hello World'
+        stage('Example') {
+            steps {
+                echo 'Hello World'
 
-                    script {
-                        def browsers = ['chrome', 'firefox']
-                        for (int i = 0; i < browsers.size(); ++i) {
-                            echo "Testing the ${browsers[i]} browser"
-                        }
+                script {
+                    def browsers = ['chrome', 'firefox']
+                    for (int i = 0; i < browsers.size(); ++i) {
+                        echo "Testing the ${browsers[i]} browser"
                     }
                 }
             }
