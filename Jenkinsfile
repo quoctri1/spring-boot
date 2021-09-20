@@ -39,8 +39,7 @@ pipeline {
             }
             steps {
                 sh (script: "curl -X GET http://localhost:8080/api/spaces \
-                            -H \"X-Octopus-ApiKey: ${env.OCTOPUS_API_TOKEN}\"
-                            ")
+                            -H \"X-Octopus-ApiKey: ${env.OCTOPUS_API_TOKEN}\"")
             }
         }
     }
