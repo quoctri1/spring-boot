@@ -35,9 +35,9 @@ pipeline {
             steps {
                 script {
                     def space_id = sh(returnStdout: true, script: "curl -X GET http://localhost:8080/api/spaces -H \"X-Octopus-ApiKey: ${env.OCTOPUS_API_TOKEN}\"").trim()
-                    // def releaseInfo = readJSON text: space_id
+                    def releaseInfo = readJSON text: space_id
                     echo "${space_id}"
-                    // sh "echo ${releaseInfo}"
+                    echo "${releaseInfo}"
                 }
             }
         }
