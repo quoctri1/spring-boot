@@ -33,13 +33,13 @@ pipeline {
                 echo 'Testing..'
             }
         }
-        stage('Crete release') {
-            environment {
-                OCTOPUS_API_TOKEN = credentials('octopus_api_token')
-            }
-            steps {
-                echo 'Hello World'
-                def browsers = ['chrome', 'firefox']
+        // stage('Crete release') {
+        //     environment {
+        //         OCTOPUS_API_TOKEN = credentials('octopus_api_token')
+        //     }
+        //     steps {
+        //         echo 'Hello World'
+        //         def browsers = ['chrome', 'firefox']
                 // script {
                     // for (int i = 0; i < browsers.size(); ++i) {
                     //     echo "Testing the ${browsers[i]} browser"
@@ -49,6 +49,18 @@ pipeline {
                     // sh "echo ${space_id}"
                     // sh "echo ${releaseInfo}"
                 // }
+        //     }
+        // }
+        stage('Example') {
+            steps {
+                echo 'Hello World'
+
+                script {
+                    def browsers = ['chrome', 'firefox']
+                    for (int i = 0; i < browsers.size(); ++i) {
+                        echo "Testing the ${browsers[i]} browser"
+                    }
+                }
             }
         }
     }
