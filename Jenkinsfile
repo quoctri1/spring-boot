@@ -5,46 +5,46 @@ OCTOPUS_RELEASE_VERSION = '0.0.6'
 OCTOPUS_PACKAGE_VERSION = ${ env.BUILD_NUMBER }
 
 pipeline {
-  agent {
-    label 'slave_node'
-  }
+    agent {
+        label 'slave_node'
+    }
 
-  stages {
-    stage('Example') {
-      steps {
-        echo 'Hello World'
+    stages {
+        stage('Example') {
+            steps {
+                echo 'Hello World'
 
-        script {
-            def browsers = ['chrome', 'firefox']
-            for (int i = 0; i < browsers.size(); ++i) {
-                echo "Testing the ${browsers[i]} browser"
+                script {
+                    def browsers = ['chrome', 'firefox']
+                    for (int i = 0; i < browsers.size(); ++i) {
+                        echo "Testing the ${browsers[i]} browser"
+                    }
+                }
             }
         }
-      }
-    }
-    stage('Sonarqube check') {
-      steps {
-        echo 'Check sonarqube server'
-      }
-    }
-      // stage('Build package') {
-      //     steps {
-      //         sh './mvnw package'
-      //     }
-      // }
-      // stage('Build and push image') {
-      //     environment {
-      //         KANIKO_AUTHEN = credentials('docker')
-      //     }
-      //     steps {
-      //         sh "docker run --rm --name kaniko -v ${env.WORKSPACE}:/workspace -v ${env.KANIKO_AUTHEN}:/kaniko/.docker/config.json gcr.io/kaniko-project/executor:latest --dockerfile=/workspace/Dockerfile --destination=phqtri/spring-boot:${env.BUILD_NUMBER}"
-      //     }
-      // }
-    stage('Test') {
-      steps {
-        echo 'Testing..'
-      }
-    }
+        // stage('Sonarqube check') {
+        //     steps {
+        //         echo 'Check sonarqube server'
+        //     }
+        // }
+        // stage('Build package') {
+        //     steps {
+        //         sh './mvnw package'
+        //     }
+        // }
+        // stage('Build and push image') {
+        //     environment {
+        //         KANIKO_AUTHEN = credentials('docker')
+        //     }
+        //     steps {
+        //         sh "docker run --rm --name kaniko -v ${env.WORKSPACE}:/workspace -v ${env.KANIKO_AUTHEN}:/kaniko/.docker/config.json gcr.io/kaniko-project/executor:latest --dockerfile=/workspace/Dockerfile --destination=phqtri/spring-boot:${env.BUILD_NUMBER}"
+        //     }
+        // }
+        // stage('Test') {
+        //     steps {
+        //         echo 'Testing..'
+        //     }
+        // }
       // stage('Crete release') {
       //     environment {
       //         OCTOPUS_API_TOKEN = credentials('octopus_api_token')
@@ -63,5 +63,5 @@ pipeline {
       // }
       //     }
       // }
-  }
+    }
 }
