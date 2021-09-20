@@ -19,7 +19,6 @@ pipeline {
                 KANIKO_AUTHEN = credentials('docker')
             }
             steps {
-                sh 'ls -la'
                 sh "docker run --rm --name kaniko -v ${env.WORKSPACE}:/workspace -v ${env.KANIKO_AUTHEN}:/kaniko/.docker/config.json gcr.io/kaniko-project/executor:latest --dockerfile=/workspace/Dockerfile --destination=phqtri/spring-boot:${env.BUILD_NUMBER}"
             }
         }
@@ -28,9 +27,12 @@ pipeline {
                 echo 'Testing..'
             }
         }
-        stage('Deploy') {
+        stage('Crete release') {
+            environment {
+                OCTOPUS_API_TOKEN = credentials('octopus_api_token')
+            }
             steps {
-                echo 'Deploying....'
+                sh "curl -X GET http://localhost:8080/api/spaces -H \"X-Octopus-ApiKey: ${env.OCTOPUS_API_TOKEN}\""
             }
         }
     }
