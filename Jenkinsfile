@@ -48,7 +48,7 @@ pipeline {
                         }
                     }
                     def projects = sh(returnStdout: true, script: "curl -X GET http://localhost:8080/api/${spaceId}/projects/ -H \"X-Octopus-ApiKey: ${env.OCTOPUS_API_TOKEN}\"").trim()
-                    def projectsInfo = = readJSON text: projects
+                    def projectsInfo = readJSON text: projects
                     echo "projectsInfo: ${projectsInfo}"
                     // for (int i = 0; i < projectsInfo.Items.size(); i++) {
                     //     if (projectsInfo.Items[i].Name == "${env.OCTOPUS_SPACE_NAME}") {
