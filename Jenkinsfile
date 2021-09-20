@@ -5,10 +5,10 @@ OCTOPUS_RELEASE_VERSION='0.0.6'
 OCTOPUS_PACKAGE_VERSION =${env.BUILD_NUMBER}
 
 pipeline {
-    agent {
+    agent
         // label 'slave_node'
         any
-    }
+    // }
 
     stages {
         stage('Sonarqube check') {
