@@ -39,17 +39,22 @@ pipeline {
             }
             steps {
                 script {
-                    def space_id = sh(returnStdout: true, script: "curl -X GET http://localhost:8080/api/spaces -H \"X-Octopus-ApiKey: ${env.OCTOPUS_API_TOKEN}\"").trim()
-                    def releaseInfo = readJSON text: space_id
-                    def spaceId,channelId
-                    echo "space_id: ${space_id}"
-                    echo "releaseInfo: ${releaseInfo.Items}"
+                    def spaces = sh(returnStdout: true, script: "curl -X GET http://localhost:8080/api/spaces -H \"X-Octopus-ApiKey: ${env.OCTOPUS_API_TOKEN}\"").trim()
+                    def releaseInfo = readJSON text: spaces
+                    def spaceId,channelId,projectId
                     for (int i = 0; i < releaseInfo.Items.size(); i++) {
                         if (releaseInfo.Items[i].Name == "${env.OCTOPUS_SPACE_NAME}") {
                             spaceId = "${releaseInfo.Items[i].Id}"
                         }
                     }
-                    echo "spaceId: ${spaceId}"
+                    def projects = sh(returnStdout: true, script: "curl -X GET http://localhost:8080/api/${spaceId}/projects/ -H \"X-Octopus-ApiKey: ${env.OCTOPUS_API_TOKEN}\"").trim()
+                    def projectsInfo = = readJSON text: projects
+                    echo "projectsInfo: ${projectsInfo}"
+                    // for (int i = 0; i < projectsInfo.Items.size(); i++) {
+                    //     if (projectsInfo.Items[i].Name == "${env.OCTOPUS_SPACE_NAME}") {
+                    //         spaceId = "${releaseInfo.Items[i].Id}"
+                    //     }
+                    // }
                 }
             }
         }
