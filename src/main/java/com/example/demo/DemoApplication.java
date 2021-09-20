@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 @SpringBootApplication
 public class DemoApplication {
 
-  @RequestMapping("/test")
+  @RequestMapping("/develop")
   public String test() {
-    return "test request";
+    return "test develop";
   }
 
   @RequestMapping("/")
