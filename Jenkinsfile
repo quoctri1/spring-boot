@@ -4,9 +4,10 @@ pipeline {
     }
 
     stages {
-        stage('Build') {
+        stage('Build package') {
             steps {
-                echo 'Building..'
+                sh './mvnw package'
+                sh 'ls -la'
             }
         }
         stage('Test') {
