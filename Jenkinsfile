@@ -44,7 +44,7 @@ pipeline {
                     echo "space_id: ${space_id}"
                     echo "releaseInfo: ${releaseInfo.Items}"
                     for (int i = 0; i < releaseInfo.Items.size(); i++) {
-                        if (releaseInfo.Items[i].Name ==  ${env.OCTOPUS_SPACE_NAME}) {
+                        if (releaseInfo.Items[i].Name == "${env.OCTOPUS_SPACE_NAME}") {
                             echo "releaseInfo: ${releaseInfo.Items[i].Id}"
                         }
                     }
