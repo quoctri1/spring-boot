@@ -74,11 +74,11 @@ pipeline {
                     def templatesInfo = readJSON text: templates
                     for (int i = 0; i < templatesInfo.Packages.size(); i++) {
                         // def verSion = sh(returnStdout: true, script: "curl -X GET http://localhost:8080/api/${spaceId}/feeds/${templatesInfo.Packages[i].FeedId}/packages/versions?packageId=${templatesInfo.Packages[i].PackageId}&take=1 -H \"X-Octopus-ApiKey: ${env.OCTOPUS_API_TOKEN}\"").trim()
-                        selectedPackageJson = "{ 'ActionName': ${templatesInfo.Packages[i].ActionName}, 'PackageReferenceName': ${templatesInfo.Packages[i].PackageReferenceName}, 'Version': ${env.OCTOPUS_PACKAGE_VERSION}}"
+                        selectedPackageJson = "{ 'ActionName': \"${templatesInfo.Packages[i].ActionName\"}, 'PackageReferenceName': \"${templatesInfo.Packages[i].PackageReferenceName\"}, 'Version': \"${env.OCTOPUS_PACKAGE_VERSION}\"}"
                         selectedPackages[i] = selectedPackageJson
                     }
                     echo "selectedPackages: ${selectedPackages}"
-                    releaseJson = "{'ChannelId': ${channelId}, 'ProjectId':  ${projectId}, 'Version': 0.0.5, 'SelectedPackages': ${selectedPackages}}"
+                    releaseJson = "{'ChannelId': \"${channelId}\", 'ProjectId':  \"${projectId}\", 'Version': \"0.0.5\", 'SelectedPackages': \"${selectedPackages}\"}"
                     echo "releaseJson: ${releaseJson}"
                 }
             }
