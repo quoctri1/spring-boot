@@ -49,7 +49,7 @@ pipeline {
                             spaceId = "${releaseInfo.Items[i].Id}"
                         }
                     }
-                    
+                    echo "spaceId: ${spaceId}"
                 }
             }
         }
