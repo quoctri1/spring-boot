@@ -33,16 +33,11 @@ pipeline {
                 OCTOPUS_API_TOKEN = credentials('octopus_api_token')
             }
             steps {
-                echo 'Hello World'
                 script {
-                    def browsers = ['chrome', 'firefox']
-                    for (int i = 0; i < browsers.size(); ++i) {
-                        echo "Testing the ${browsers[i]} browser"
-                    }
-                    def space_id = sh(returnStdout: true, script: "curl -X GET http://localhost:8080/api/spaces -H \"X-Octopus-ApiKey: ${env.OCTOPUS_API_TOKEN}\"")
-                    def releaseInfo = readJSON text: space_id
+                    def space_id = sh(returnStdout: true, script: "curl -X GET http://localhost:8080/api/spaces -H \"X-Octopus-ApiKey: ${env.OCTOPUS_API_TOKEN}\"").trim()
+                    // def releaseInfo = readJSON text: space_id
                     sh "echo ${space_id}"
-                    sh "echo ${releaseInfo}"
+                    // sh "echo ${releaseInfo}"
                 }
             }
         }
