@@ -37,7 +37,8 @@ pipeline {
                     def space_id = sh(returnStdout: true, script: "curl -X GET http://localhost:8080/api/spaces -H \"X-Octopus-ApiKey: ${env.OCTOPUS_API_TOKEN}\"").trim()
                     def releaseInfo = readJSON text: space_id
                     echo "space_id: ${space_id}"
-                    for (int i = 0; i < ${releaseInfo.Items}.size(); i++) {
+                    echo "releaseInfo: ${releaseInfo.Items}"
+                    for (int i = 0; i < releaseInfo.Items.size(); i++) {
                         echo "releaseInfo: ${releaseInfo.Items[i].Id}"
                     }
                 }
