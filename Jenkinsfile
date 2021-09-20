@@ -78,6 +78,8 @@ pipeline {
                         selectedPackages[i] = selectedPackageJson
                     }
                     echo "selectedPackages: ${selectedPackages}"
+                    releaseJson = "{'ChannelId': ${channelId}, 'ProjectId':  ${projectId}, 'Version': 0.0.5, 'SelectedPackages': selectedPackages}"
+                    echo "releaseJson: ${releaseJson}"
                 }
             }
         }
