@@ -35,7 +35,7 @@ pipeline {
                 OCTOPUS_PROJECT_NAME = 'dev-spring-boot'
                 OCTOPUS_CHANNEL_NAME = 'Default'
                 OCTOPUS_RELEASE_VERSION = '0.0.6'
-                OCTOPUS_PACKAGE_VERSION = ${ env.BUILD_NUMBER }
+                OCTOPUS_PACKAGE_VERSION = "${env.BUILD_NUMBER}"
             }
             steps {
                 script {
