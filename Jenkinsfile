@@ -39,8 +39,8 @@ pipeline {
             }
             steps {
                 echo 'Hello World'
-                script {
-                    // def browsers = ['chrome', 'firefox']
+                def browsers = ['chrome', 'firefox']
+                // script {
                     // for (int i = 0; i < browsers.size(); ++i) {
                     //     echo "Testing the ${browsers[i]} browser"
                     // }
@@ -48,7 +48,7 @@ pipeline {
                     // def releaseInfo = readJSON text: space_id
                     // sh "echo ${space_id}"
                     // sh "echo ${releaseInfo}"
-                }
+                // }
             }
         }
     }
