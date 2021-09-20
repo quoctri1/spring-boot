@@ -71,9 +71,10 @@ pipeline {
                     //Template
                     def templates = sh(returnStdout: true, script: "curl -X GET http://localhost:8080/api/${spaceId}/deploymentprocesses/deploymentprocess-${projectId}/template?channel=${channelId} -H \"X-Octopus-ApiKey: ${env.OCTOPUS_API_TOKEN}\"").trim()
                     def templatesInfo = readJSON text: templates
+                    echo "templatesInfo: ${templatesInfo}"
                     for (int i = 0; i < templatesInfo.Packages.size(); i++) {
                         // if (channelsInfo.Items[i].Name == "${env.OCTOPUS_CHANNEL_NAME}") {
-                        echo 'package: ${templatesInfo.Packages[i]}'
+                        echo "package: ${templatesInfo.Packages[i]}"
                         // }
                     }
                 }
