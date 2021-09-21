@@ -9,7 +9,7 @@ pipeline {
         OCTOPUS_PROJECT_NAME = 'dev-spring-boot'
         OCTOPUS_CHANNEL_NAME = 'Default'
         OCTOPUS_PACKAGE_VERSION = "11"
-        OCTOPUS_RELEASE_VERSION
+        OCTOPUS_RELEASE_VERSION = ""
     }
 
     stages {
