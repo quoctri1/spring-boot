@@ -80,7 +80,7 @@ pipeline {
                     releaseJson = "{'ChannelId': ${channelId}, 'ProjectId':  ${projectId}, 'Version': 0.0.5, 'SelectedPackages': ${selectedPackages}}"
                     
                     //Create release
-                    def release = sh(returnStdout: true, script: "curl -X POST http://localhost:8080/api/${spaceId}/releases -H \"X-Octopus-ApiKey: ${env.OCTOPUS_API_TOKEN}\" -H \"Content-Type: application/json\" --data ${releaseJson}").trim()
+                    def release = sh(returnStdout: true, script: "curl -X POST http://localhost:8080/api/${spaceId}/releases -H \"X-Octopus-ApiKey: ${env.OCTOPUS_API_TOKEN}\" -H \"Content-Type: application/json\" --data \"${releaseJson}\"").trim()
                     echo "release: ${release}"
                 }
             }
