@@ -106,11 +106,11 @@ pipeline {
                     def releasesInfo = readJSON text: releases
                     for (int i = 0; i < releasesInfo.Items.size(); i++) {
                         if (releasesInfo.Items[i].Version == "${OCTOPUS_RELEASE_VERSION}") {
-                            releaseId = "${spacesInfo.Items[i].Id}"
+                            releaseId = "${releasesInfo.Items[i].Id}"
                         }
                     }
                     echo "releaseId: ${releaseId}"
-                    
+
                 }
             }
         }
