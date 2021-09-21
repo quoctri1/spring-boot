@@ -74,14 +74,14 @@ pipeline {
                     def templatesInfo = readJSON text: templates
                     for (int i = 0; i < templatesInfo.Packages.size(); i++) {
                         // def verSion = sh(returnStdout: true, script: "curl -X GET http://localhost:8080/api/${spaceId}/feeds/${templatesInfo.Packages[i].FeedId}/packages/versions?packageId=${templatesInfo.Packages[i].PackageId}&take=1 -H \"X-Octopus-ApiKey: ${env.OCTOPUS_API_TOKEN}\"").trim()
-                        selectedPackageJson = "{ 'ActionName': ${templatesInfo.Packages[i].ActionName}, 'PackageReferenceName': ${templatesInfo.Packages[i].PackageReferenceName}, 'Version': ${env.OCTOPUS_PACKAGE_VERSION}}"
+                        selectedPackageJson = "{ \"ActionName\": \"${templatesInfo.Packages[i].ActionName}\", \"PackageReferenceName\": \"${templatesInfo.Packages[i].PackageReferenceName}\", \"Version\": \"${env.OCTOPUS_PACKAGE_VERSION}\"}"
                         selectedPackages[i] = selectedPackageJson
                     }
-                    releaseJson = "{'ChannelId': ${channelId}, 'ProjectId':  ${projectId}, 'Version': ${env.OCTOPUS_RELEASE_VERSION}, 'SelectedPackages': ${selectedPackages}}"
-
+                    releaseJson = "{\"ChannelId\": \"${channelId}\", \"ProjectId\":  \"${projectId}\", \"Version\": \"${env.OCTOPUS_RELEASE_VERSION}\", \"SelectedPackages\": \"${selectedPackages}\"}"
+                    echo "releaseJson: ${releaseJson}"
                     //Create release
-                    def release = sh(returnStdout: true, script: "curl -X POST http://localhost:8080/api/${spaceId}/releases -H \"X-Octopus-ApiKey: ${env.OCTOPUS_API_TOKEN}\" -H \"Content-Type: application/json\" --data \"${releaseJson}\"").trim()
-                    echo "release: ${release}"
+                    // def release = sh(returnStdout: true, script: "curl -X POST http://localhost:8080/api/${spaceId}/releases -H \"X-Octopus-ApiKey: ${env.OCTOPUS_API_TOKEN}\" -H \"Content-Type: application/json\" --data \"${releaseJson}\"").trim()
+                    // echo "release: ${release}"
                 }
             }
         }
