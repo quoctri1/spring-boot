@@ -41,7 +41,7 @@ pipeline {
                 script {
                     def spaceId,projectId,channelId
                     //Spaces
-                    def spaces = sh(returnStdout: true, script: "curl -X GET http://localhost:8080/api/spaces -H \"X-Octopus-ApiKey: ${env.OCTOPUS_API_TOKEN}\"").trim()
+                    def spaces = sh(returnStdout: true, script: 'curl -X GET http://localhost:8080/api/spaces -H "X-Octopus-ApiKey: ${env.OCTOPUS_API_TOKEN}"').trim()
                     def releaseInfo = readJSON text: spaces
                     for (int i = 0; i < releaseInfo.Items.size(); i++) {
                         if (releaseInfo.Items[i].Name == "${env.OCTOPUS_SPACE_NAME}") {
@@ -82,8 +82,8 @@ pipeline {
                     releaseJson = "{\"ChannelId\": \"${channelId}\", \"ProjectId\":  \"${projectId}\", \"Version\": \"${env.OCTOPUS_RELEASE_VERSION}\", \"SelectedPackages\": ${selectedPackages}}"
                     
                     //Create release
-                    def release = sh(returnStdout: true, script: "curl -X POST http://localhost:8080/api/${spaceId}/releases -H \"X-Octopus-ApiKey: ${env.OCTOPUS_API_TOKEN}\" -H \"Content-Type: application/json\" --data '${releaseJson}'").trim()
-                    echo "release: ${release}"
+                    // def release = sh(returnStdout: true, script: "curl -X POST http://localhost:8080/api/${spaceId}/releases -H \"X-Octopus-ApiKey: ${env.OCTOPUS_API_TOKEN}\" -H \"Content-Type: application/json\" --data '${releaseJson}'").trim()
+                    // echo "release: ${release}"
                 }
             }
         }
