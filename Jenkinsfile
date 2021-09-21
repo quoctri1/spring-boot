@@ -53,7 +53,6 @@ pipeline {
                     //Projects
                     def projects = sh(returnStdout: true, script: "curl -sX GET http://localhost:8080/api/${spaceId}/projects/ -H \"X-Octopus-ApiKey: ${OCTOPUS_API_TOKEN}\"").trim()
                     def projectsInfo = readJSON text: projects
-                    echo "projectsInfo: ${projectsInfo}"
                     for (int i = 0; i < projectsInfo.Items.size(); i++) {
                         if (projectsInfo.Items[i].Name == "${env.OCTOPUS_PROJECT_NAME}") {
                             projectId = "${projectsInfo.Items[i].Id}"
@@ -63,7 +62,6 @@ pipeline {
 
                     //Channels
                     def channels = sh(returnStdout: true, script: "curl -sX GET http://localhost:8080/api/${spaceId}/projects/${projectId}/channels -H \"X-Octopus-ApiKey: ${OCTOPUS_API_TOKEN}\"").trim()
-                    echo "channels: ${channels}"
                     def channelsInfo = readJSON text: channels
                     for (int i = 0; i < channelsInfo.Items.size(); i++) {
                         if (channelsInfo.Items[i].Name == "${env.OCTOPUS_CHANNEL_NAME}") {
@@ -83,8 +81,8 @@ pipeline {
                     releaseJson = "{\"ChannelId\": \"${channelId}\", \"ProjectId\":  \"${projectId}\", \"Version\": \"${env.OCTOPUS_RELEASE_VERSION}\", \"SelectedPackages\": ${selectedPackages}}"
 
                     //Create release
-                    // def release = sh(returnStdout: true, script: 'curl -X POST http://localhost:8080/api/${spaceId}/releases -H "X-Octopus-ApiKey: ${env.OCTOPUS_API_TOKEN}" -H "Content-Type: application/json" --data \'${releaseJson}\'').trim()
-                    // echo "release: ${release}"
+                    def release = sh(returnStdout: true, script: "curl -X POST http://localhost:8080/api/${spaceId}/releases -H \"X-Octopus-ApiKey: ${OCTOPUS_API_TOKEN}\" -H \"Content-Type: application/json\" --data '${releaseJson}'").trim()
+                    echo "release: ${release}"
                 }
             }
         }
