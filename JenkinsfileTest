@@ -12,11 +12,11 @@
 
      stages {
          stage('Build') {
-             lock('MyProjectSCM') {
-                 steps {
-                     echo 'Build within MyProjectSCM lock...'
-                 }
-             }
+            steps {
+              lock('MyProjectSCM') {
+                echo 'Build within MyProjectSCM lock...'
+              }
+            }
          }
      }
  }
