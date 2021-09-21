@@ -77,7 +77,7 @@ pipeline {
                         selectedPackageJson = "{ \"ActionName\": \"${templatesInfo.Packages[i].ActionName}\", \"PackageReferenceName\": \"${templatesInfo.Packages[i].PackageReferenceName}\", \"Version\": \"${env.OCTOPUS_PACKAGE_VERSION}\"}"
                         selectedPackages[i] = selectedPackageJson
                     }
-                    releaseJson = "{\"ChannelId\": \"${channelId}\", \"ProjectId\":  \"${projectId}\", \"Version\": \"${env.OCTOPUS_RELEASE_VERSION}\", \"SelectedPackages\": \"${selectedPackages}\"}"
+                    releaseJson = "{\"ChannelId\": \"${channelId}\", \"ProjectId\":  \"${projectId}\", \"Version\": \"${env.OCTOPUS_RELEASE_VERSION}\", \"SelectedPackages\": ${selectedPackages}}"
                     //Create release
                     def release = sh(returnStdout: true, script: "curl -X POST http://localhost:8080/api/${spaceId}/releases -H \"X-Octopus-ApiKey: ${env.OCTOPUS_API_TOKEN}\" -H \"Content-Type: application/json\" --data '${releaseJson}'").trim()
                     echo "release: ${release}"
