@@ -35,7 +35,7 @@ pipeline {
                 OCTOPUS_PROJECT_NAME = 'dev-spring-boot'
                 OCTOPUS_CHANNEL_NAME = 'Default'
                 OCTOPUS_RELEASE_VERSION = '0.0.6'
-                OCTOPUS_PACKAGE_VERSION = "${env.BUILD_NUMBER}"
+                OCTOPUS_PACKAGE_VERSION = "2"
             }
             steps {
                 script {
@@ -77,9 +77,11 @@ pipeline {
                         selectedPackageJson = "{ 'ActionName': ${templatesInfo.Packages[i].ActionName}, 'PackageReferenceName': ${templatesInfo.Packages[i].PackageReferenceName}, 'Version': ${env.OCTOPUS_PACKAGE_VERSION}}"
                         selectedPackages[i] = selectedPackageJson
                     }
-                    echo "selectedPackages: ${selectedPackages}"
                     releaseJson = "{'ChannelId': ${channelId}, 'ProjectId':  ${projectId}, 'Version': 0.0.5, 'SelectedPackages': ${selectedPackages}}"
-                    echo "releaseJson: ${releaseJson}"
+                    
+                    //Create release
+                    def release = sh(returnStdout: true, script: "curl -X POST http://localhost:8080/api/${spaceId}/releases -H \"X-Octopus-ApiKey: ${env.OCTOPUS_API_TOKEN}\" -H \"Content-Type: application/json\" --data ${releaseJson}").trim()
+                    echo "release: ${release}"
                 }
             }
         }
