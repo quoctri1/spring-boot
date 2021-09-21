@@ -101,6 +101,7 @@ pipeline {
                         }
                     }
                     echo "spaceId: ${spaceId}"
+
                     //Environment
                     def environments = sh(returnStdout: true, script: "curl -sX GET http://localhost:8080/api/${spaceId}/environments -H \"X-Octopus-ApiKey: ${OCTOPUS_API_TOKEN}\"").trim()
                     def environmentsInfo = readJSON text: environments
@@ -120,8 +121,12 @@ pipeline {
                         }
                     }
                     echo "releaseId: ${releaseId}"
+
+                    //Deployment
                     deploymentJson = "{\"ReleaseId\": \"${releaseId}\", \"EnvironmentId\": \"${environmentId}\"}"
-                    echo "deploymentJson: ${deploymentJson}"
+                    def deployment = sh(returnStdout: true, script: "curl -sX POST http://localhost:8080/api/${spaceId}/deployments -H \"X-Octopus-ApiKey: ${OCTOPUS_API_TOKEN}\" -H \"Content-Type: application/json\" --data '${deploymentJson}'").trim()
+                    def deploymentsInfo = readJSON text: deployment
+                    echo "deploymentsInfo: ${deploymentsInfo}"
                 }
             }
         }
