@@ -51,7 +51,7 @@ pipeline {
                     echo "spaceId: ${spaceId}"
                     
                     //Projects
-                    def projects = sh(returnStdout: true, script: 'curl -X GET http://localhost:8080/api/${spaceId}/projects/ -H "X-Octopus-ApiKey: ${env.OCTOPUS_API_TOKEN}"').trim()
+                    def projects = sh(returnStdout: true, script: 'curl -X GET http://localhost:8080/api/${spaceId}/projects/ -H "X-Octopus-ApiKey: ${OCTOPUS_API_TOKEN}"').trim()
                     def projectsInfo = readJSON text: projects
                     for (int i = 0; i < projectsInfo.Items.size(); i++) {
                         if (projectsInfo.Items[i].Name == "${env.OCTOPUS_PROJECT_NAME}") {
@@ -61,7 +61,7 @@ pipeline {
                     echo "projectId: ${projectId}"
                     
                     //Channels
-                    def channels = sh(returnStdout: true, script: "curl -X GET http://localhost:8080/api/${spaceId}/projects/${projectId}/channels -H \"X-Octopus-ApiKey: ${env.OCTOPUS_API_TOKEN}\"").trim()
+                    def channels = sh(returnStdout: true, script: 'curl -X GET http://localhost:8080/api/${spaceId}/projects/${projectId}/channels -H "X-Octopus-ApiKey: ${OCTOPUS_API_TOKEN}"').trim()
                     def channelsInfo = readJSON text: channels
                     for (int i = 0; i < channelsInfo.Items.size(); i++) {
                         if (channelsInfo.Items[i].Name == "${env.OCTOPUS_CHANNEL_NAME}") {
@@ -72,17 +72,16 @@ pipeline {
 
                     //Template
                     def selectedPackages = []
-                    def templates = sh(returnStdout: true, script: "curl -X GET http://localhost:8080/api/${spaceId}/deploymentprocesses/deploymentprocess-${projectId}/template?channel=${channelId} -H \"X-Octopus-ApiKey: ${env.OCTOPUS_API_TOKEN}\"").trim()
+                    def templates = sh(returnStdout: true, script: 'curl -X GET http://localhost:8080/api/${spaceId}/deploymentprocesses/deploymentprocess-${projectId}/template?channel=${channelId} -H "X-Octopus-ApiKey: ${OCTOPUS_API_TOKEN}"').trim()
                     def templatesInfo = readJSON text: templates
                     for (int i = 0; i < templatesInfo.Packages.size(); i++) {
-                        // def verSion = sh(returnStdout: true, script: "curl -X GET http://localhost:8080/api/${spaceId}/feeds/${templatesInfo.Packages[i].FeedId}/packages/versions?packageId=${templatesInfo.Packages[i].PackageId}&take=1 -H \"X-Octopus-ApiKey: ${env.OCTOPUS_API_TOKEN}\"").trim()
                         selectedPackageJson = "{ \"ActionName\": \"${templatesInfo.Packages[i].ActionName}\", \"PackageReferenceName\": \"${templatesInfo.Packages[i].PackageReferenceName}\", \"Version\": \"${env.OCTOPUS_PACKAGE_VERSION}\"}"
                         selectedPackages[i] = selectedPackageJson
                     }
                     releaseJson = "{\"ChannelId\": \"${channelId}\", \"ProjectId\":  \"${projectId}\", \"Version\": \"${env.OCTOPUS_RELEASE_VERSION}\", \"SelectedPackages\": ${selectedPackages}}"
                     
                     //Create release
-                    // def release = sh(returnStdout: true, script: "curl -X POST http://localhost:8080/api/${spaceId}/releases -H \"X-Octopus-ApiKey: ${env.OCTOPUS_API_TOKEN}\" -H \"Content-Type: application/json\" --data '${releaseJson}'").trim()
+                    // def release = sh(returnStdout: true, script: 'curl -X POST http://localhost:8080/api/${spaceId}/releases -H "X-Octopus-ApiKey: ${env.OCTOPUS_API_TOKEN}" -H "Content-Type: application/json" --data \'${releaseJson}\'').trim()
                     // echo "release: ${release}"
                 }
             }
