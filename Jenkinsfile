@@ -10,6 +10,7 @@ pipeline {
         OCTOPUS_CHANNEL_NAME = 'Default'
         OCTOPUS_PACKAGE_VERSION = "11"
         OCTOPUS_RELEASE_VERSION = "0.0.6"
+        OCTOPUS_ENVIRONMENT = "dev"
     }
 
     stages {
@@ -90,7 +91,7 @@ pipeline {
         stage('Start release') {
             steps {
                 script {
-                    def spaceId,releaseId
+                    def spaceId,environmentId,releaseId
                     //Spaces
                     def spaces = sh(returnStdout: true, script: "curl -sX GET http://localhost:8080/api/spaces -H \"X-Octopus-ApiKey: ${OCTOPUS_API_TOKEN}\"").trim()
                     def spacesInfo = readJSON text: spaces
@@ -100,6 +101,15 @@ pipeline {
                         }
                     }
                     echo "spaceId: ${spaceId}"
+                    //Environment
+                    def environments = sh(returnStdout: true, script: "curl -sX GET http://localhost:8080/api/${spaceId}/environments -H \"X-Octopus-ApiKey: ${OCTOPUS_API_TOKEN}\"").trim()
+                    def environmentsInfo = readJSON text: environments
+                    for (int i = 0; i < environmentsInfo.Items.size(); i++) {
+                        if (environmentsInfo.Items[i].Name == "${OCTOPUS_ENVIRONMENT}") {
+                            environmentId = "${environmentsInfo.Items[i].Id}"
+                        }
+                    }
+                    echo "environmentId: ${environmentId}"
 
                     //Releases
                     def releases = sh(returnStdout: true, script: "curl -sX GET http://localhost:8080/api/${spaceId}/releases -H \"X-Octopus-ApiKey: ${OCTOPUS_API_TOKEN}\"").trim()
@@ -110,7 +120,8 @@ pipeline {
                         }
                     }
                     echo "releaseId: ${releaseId}"
-
+                    deploymentJson = "{\"ReleaseId\": \"${releaseId}\", \"EnvironmentId\": \"${environmentId}\"}"
+                    echo "deploymentJson: ${deploymentJson}"
                 }
             }
         }
