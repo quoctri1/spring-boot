@@ -3,6 +3,14 @@ pipeline {
     agent {
         label 'slave_node'
     }
+    environment {
+        OCTOPUS_API_TOKEN = credentials('octopus_api_token')
+        OCTOPUS_SPACE_NAME = 'Default'
+        OCTOPUS_PROJECT_NAME = 'dev-spring-boot'
+        OCTOPUS_CHANNEL_NAME = 'Default'
+        // OCTOPUS_RELEASE_VERSION = '0.0.6'
+        OCTOPUS_PACKAGE_VERSION = "2"
+    }
 
     stages {
         stage('Sonarqube check') {
@@ -29,14 +37,6 @@ pipeline {
             }
         }
         stage('Crete release') {
-            environment {
-                OCTOPUS_API_TOKEN = credentials('octopus_api_token')
-                OCTOPUS_SPACE_NAME = 'Default'
-                OCTOPUS_PROJECT_NAME = 'dev-spring-boot'
-                OCTOPUS_CHANNEL_NAME = 'Default'
-                OCTOPUS_RELEASE_VERSION = '0.0.6'
-                OCTOPUS_PACKAGE_VERSION = "2"
-            }
             steps {
                 script {
                     def spaceId,projectId,channelId
