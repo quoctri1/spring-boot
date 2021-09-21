@@ -9,7 +9,7 @@ pipeline {
         OCTOPUS_PROJECT_NAME = 'dev-spring-boot'
         OCTOPUS_CHANNEL_NAME = 'Default'
         OCTOPUS_PACKAGE_VERSION = "11"
-        OCTOPUS_RELEASE_VERSION = ""
+        OCTOPUS_RELEASE_VERSION = "0.0.6"
     }
 
     stages {
@@ -104,7 +104,13 @@ pipeline {
                     //Releases
                     def releases = sh(returnStdout: true, script: "curl -sX GET http://localhost:8080/api/${spaceId}/releases -H \"X-Octopus-ApiKey: ${OCTOPUS_API_TOKEN}\"").trim()
                     def releasesInfo = readJSON text: releases
-                    echo "releasesInfo: ${releasesInfo}"
+                    for (int i = 0; i < releasesInfo.Items.size(); i++) {
+                        if (releasesInfo.Items[i].Version == "${OCTOPUS_RELEASE_VERSION}") {
+                            releaseId = "${spacesInfo.Items[i].Id}"
+                        }
+                    }
+                    echo "releaseId: ${releaseId}"
+                    
                 }
             }
         }
