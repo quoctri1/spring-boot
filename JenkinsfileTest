@@ -1,22 +1,27 @@
  pipeline {
-     agent any
+    agent any
 
-     options {
-         disableConcurrentBuilds()   
-         skipDefaultCheckout()
-     }
+    options {
+      disableConcurrentBuilds()   
+      skipDefaultCheckout()
+    }
 
-     triggers {
-         upstream(upstreamProjects: 'MyProjectSCM')
-     }
+    triggers {
+      upstream(upstreamProjects: 'MyProjectSCM')
+    }
 
-     stages {
-         stage('Build') {
-            steps {
-              lock('MyProjectSCM') {
-                echo 'Build within MyProjectSCM lock...'
-              }
-            }
-         }
-     }
+    stages {
+      stage('Build') {
+        steps {
+          lock('MyProjectSCM') {
+            echo 'Build...'
+          }
+        }
+      }
+      stage('Test') {
+        steps {
+          echo 'Test...'
+        }
+      }
+    }
  }
