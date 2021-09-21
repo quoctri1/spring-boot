@@ -93,18 +93,18 @@ pipeline {
                     def spaceId,releaseId
                     //Spaces
                     def spaces = sh(returnStdout: true, script: "curl -sX GET http://localhost:8080/api/spaces -H \"X-Octopus-ApiKey: ${OCTOPUS_API_TOKEN}\"").trim()
-                    def releaseInfo = readJSON text: spaces
-                    for (int i = 0; i < releaseInfo.Items.size(); i++) {
-                        if (releaseInfo.Items[i].Name == "${OCTOPUS_SPACE_NAME}") {
-                            spaceId = "${releaseInfo.Items[i].Id}"
+                    def spacesInfo = readJSON text: spaces
+                    for (int i = 0; i < spacesInfo.Items.size(); i++) {
+                        if (spacesInfo.Items[i].Name == "${OCTOPUS_SPACE_NAME}") {
+                            spaceId = "${spacesInfo.Items[i].Id}"
                         }
                     }
                     echo "spaceId: ${spaceId}"
 
                     //Releases
                     def releases = sh(returnStdout: true, script: "curl -sX GET http://localhost:8080/api/${spaceId}/releases -H \"X-Octopus-ApiKey: ${OCTOPUS_API_TOKEN}\"").trim()
-                    def releaseInfo = readJSON text: releases
-                    echo "releaseInfo: ${releaseInfo}"
+                    def releasesInfo = readJSON text: releases
+                    echo "releasesInfo: ${releasesInfo}"
                 }
             }
         }
