@@ -9,7 +9,7 @@ pipeline {
         OCTOPUS_PROJECT_NAME = 'dev-spring-boot'
         OCTOPUS_CHANNEL_NAME = 'Default'
         // OCTOPUS_RELEASE_VERSION = '0.0.6'
-        OCTOPUS_PACKAGE_VERSION = "2"
+        OCTOPUS_PACKAGE_VERSION = "11"
     }
 
     stages {
@@ -18,19 +18,19 @@ pipeline {
                 echo 'Check sonarqube server'
             }
         }
-        // stage('Build package') {
-        //     steps {
-        //         sh './mvnw package'
-        //     }
-        // }
-        // stage('Build and push image') {
-        //     environment {
-        //         KANIKO_AUTHEN = credentials('docker')
-        //     }
-        //     steps {
-        //         sh "docker run --rm --name kaniko -v ${env.WORKSPACE}:/workspace -v ${env.KANIKO_AUTHEN}:/kaniko/.docker/config.json gcr.io/kaniko-project/executor:latest --dockerfile=/workspace/Dockerfile --destination=phqtri/spring-boot:${env.BUILD_NUMBER}"
-        //     }
-        // }
+        stage('Build package') {
+            steps {
+                sh './mvnw package'
+            }
+        }
+        stage('Build and push image') {
+            environment {
+                KANIKO_AUTHEN = credentials('docker')
+            }
+            steps {
+                sh "docker run --rm --name kaniko -v ${env.WORKSPACE}:/workspace -v ${env.KANIKO_AUTHEN}:/kaniko/.docker/config.json gcr.io/kaniko-project/executor:latest --dockerfile=/workspace/Dockerfile --destination=phqtri/spring-boot:${OCTOPUS_PACKAGE_VERSION}"
+            }
+        }
         stage('Test') {
             steps {
                 echo 'Testing..'
@@ -44,7 +44,7 @@ pipeline {
                     def spaces = sh(returnStdout: true, script: "curl -sX GET http://localhost:8080/api/spaces -H \"X-Octopus-ApiKey: ${OCTOPUS_API_TOKEN}\"").trim()
                     def releaseInfo = readJSON text: spaces
                     for (int i = 0; i < releaseInfo.Items.size(); i++) {
-                        if (releaseInfo.Items[i].Name == "${env.OCTOPUS_SPACE_NAME}") {
+                        if (releaseInfo.Items[i].Name == "${OCTOPUS_SPACE_NAME}") {
                             spaceId = "${releaseInfo.Items[i].Id}"
                         }
                     }
@@ -54,7 +54,7 @@ pipeline {
                     def projects = sh(returnStdout: true, script: "curl -sX GET http://localhost:8080/api/${spaceId}/projects/ -H \"X-Octopus-ApiKey: ${OCTOPUS_API_TOKEN}\"").trim()
                     def projectsInfo = readJSON text: projects
                     for (int i = 0; i < projectsInfo.Items.size(); i++) {
-                        if (projectsInfo.Items[i].Name == "${env.OCTOPUS_PROJECT_NAME}") {
+                        if (projectsInfo.Items[i].Name == "${OCTOPUS_PROJECT_NAME}") {
                             projectId = "${projectsInfo.Items[i].Id}"
                         }
                     }
@@ -64,7 +64,7 @@ pipeline {
                     def channels = sh(returnStdout: true, script: "curl -sX GET http://localhost:8080/api/${spaceId}/projects/${projectId}/channels -H \"X-Octopus-ApiKey: ${OCTOPUS_API_TOKEN}\"").trim()
                     def channelsInfo = readJSON text: channels
                     for (int i = 0; i < channelsInfo.Items.size(); i++) {
-                        if (channelsInfo.Items[i].Name == "${env.OCTOPUS_CHANNEL_NAME}") {
+                        if (channelsInfo.Items[i].Name == "${OCTOPUS_CHANNEL_NAME}") {
                             channelId = "${channelsInfo.Items[i].Id}"
                         }
                     }
@@ -76,7 +76,7 @@ pipeline {
                     def templatesInfo = readJSON text: templates
 
                     for (int i = 0; i < templatesInfo.Packages.size(); i++) {
-                        selectedPackageJson = "{ \"ActionName\": \"${templatesInfo.Packages[i].ActionName}\", \"PackageReferenceName\": \"${templatesInfo.Packages[i].PackageReferenceName}\", \"Version\": \"${env.OCTOPUS_PACKAGE_VERSION}\"}"
+                        selectedPackageJson = "{ \"ActionName\": \"${templatesInfo.Packages[i].ActionName}\", \"PackageReferenceName\": \"${templatesInfo.Packages[i].PackageReferenceName}\", \"Version\": \"${OCTOPUS_PACKAGE_VERSION}\"}"
                         selectedPackages[i] = selectedPackageJson
                     }
                     releaseJson = "{\"ChannelId\": \"${channelId}\", \"ProjectId\":  \"${projectId}\", \"Version\": \"${templatesInfo.NextVersionIncrement}\", \"SelectedPackages\": ${selectedPackages}}"
