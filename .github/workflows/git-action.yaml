@@ -23,3 +23,5 @@ jobs:
       run: mvn install
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag spring-boot:$GITHUB_RUN_NUMBER
+    - name: List docker images
+      run: docker images
