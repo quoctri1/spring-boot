@@ -22,6 +22,6 @@ jobs:
     - name: Build with Maven
       run: mvn install
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag spring-boot:$GITHUB_RUN_NUMBER
-    - name: List docker images
-      run: docker images
+      run: docker build . --file Dockerfile --tag phqtri/spring-boot:$GITHUB_RUN_NUMBER
+    - name: Docker login
+      run: docker login -u pqtri -p 666251ac-e6b4-4ccf-a970-9fcdfc4a572f
