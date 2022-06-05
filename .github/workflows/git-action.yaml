@@ -25,3 +25,5 @@ jobs:
       run: docker build . --file Dockerfile --tag phqtri/spring-boot:$GITHUB_RUN_NUMBER
     - name: Docker login
       run: docker login -u pqtri -p 666251ac-e6b4-4ccf-a970-9fcdfc4a572f
+    - name: Docker push
+      run: docker push phqtri/spring-boot:$GITHUB_RUN_NUMBER
