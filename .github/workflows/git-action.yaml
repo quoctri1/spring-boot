@@ -24,6 +24,8 @@ jobs:
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag phqtri/spring-boot:$GITHUB_RUN_NUMBER
     - name: Docker login
+      env:
+        DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
       run: docker login -u pqtri -p $DOCKER_TOKEN
     - name: Docker push
       run: docker push phqtri/spring-boot:$GITHUB_RUN_NUMBER
